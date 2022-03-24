@@ -1,4 +1,4 @@
-package domain;
+package com.example.projectlaminam.domain;
 
 import javax.persistence.*;
 import java.util.HashSet;
