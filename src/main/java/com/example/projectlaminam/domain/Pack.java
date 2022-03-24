@@ -5,7 +5,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "packages")
+@Table(name = "pack")
 public class Pack {
 
     @Id
@@ -14,7 +14,14 @@ public class Pack {
 
     private String name;
 
+    @OneToMany(mappedBy = "pack", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<Card> cards = new HashSet<>();
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(     name = "user_package",
+            joinColumns = { @JoinColumn(name = "package_id")},
+            inverseJoinColumns = { @JoinColumn(name = "user_id")}
+    )
     private Set<User> users = new HashSet<>();
 
     public Long getId() {
@@ -33,7 +40,6 @@ public class Pack {
         this.name = name;
     }
 
-    @OneToMany
     public Set<Card> getCards() {
         return cards;
     }
@@ -42,11 +48,6 @@ public class Pack {
         this.cards = cards;
     }
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(     name = "user_package",
-            joinColumns = { @JoinColumn(name = "package_id")},
-            inverseJoinColumns = { @JoinColumn(name = "user_id")}
-    )
     public Set<User> getUsers() {
         return users;
     }

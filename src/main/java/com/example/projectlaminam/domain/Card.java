@@ -3,7 +3,7 @@ package com.example.projectlaminam.domain;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "cards")
+@Table(name = "card")
 public class Card {
 
     @Id
@@ -14,6 +14,7 @@ public class Card {
     private String frontSide;
     private String backSide;
 
+    @ManyToOne
     private Pack pack;
 
     public Long getId() {
@@ -48,7 +49,6 @@ public class Card {
         this.backSide = backSide;
     }
 
-    @ManyToOne
     public Pack getPack() {
         return pack;
     }
