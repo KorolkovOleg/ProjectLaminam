@@ -11,8 +11,8 @@ class App extends Component {
             <Router>
                 <Switch>
                     <Route path='/' exact={true} component={Home}/>
-                    <Route path='/clients' exact={true} component={PackList}/>
-                    <Route path='/clients/:id' component={PackEdit}/>
+                    <Route path='/packages' exact={true} component={PackList}/>
+                    <Route path='/packages/:id' component={PackEdit}/>
                 </Switch>
             </Router>
         )

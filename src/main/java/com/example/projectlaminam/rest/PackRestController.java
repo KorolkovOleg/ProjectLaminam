@@ -26,7 +26,7 @@ public class PackRestController {
     }
 
     @GetMapping("/{packId}")
-    public Pack getPack(@PathVariable Long id) {
+    public Pack getPack(@PathVariable("packId") Long id) {
         return packRepository.findById(id).orElseThrow(RuntimeException::new);
     }
 
@@ -37,13 +37,15 @@ public class PackRestController {
     }
 
     @PutMapping("/{packId}")
-    public ResponseEntity updatePack(@PathVariable Long id, @RequestBody Pack pack) {
-
-        return ResponseEntity.ok(pack);
+    public ResponseEntity updatePack(@PathVariable("packId") Long id, @RequestBody Pack pack) {
+        System.out.println(pack);
+        Pack currentPack = packRepository.save(pack);
+        System.out.println(currentPack);
+        return ResponseEntity.ok(currentPack);
     }
 
     @DeleteMapping("/{packId}")
-    public ResponseEntity deleteClient(@PathVariable Long id) {
+    public ResponseEntity deleteClient(@PathVariable("packId") Long id) {
         packRepository.deleteById(id);
         return ResponseEntity.ok().build();
     }

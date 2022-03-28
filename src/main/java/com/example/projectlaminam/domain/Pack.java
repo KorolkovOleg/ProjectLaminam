@@ -55,4 +55,14 @@ public class Pack {
     public void setUsers(Set<User> users) {
         this.users = users;
     }
+
+    @Override
+    public String toString() {
+        return "Pack{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", cards=" + cards +
+                ", users=" + users +
+                '}';
+    }
 }
