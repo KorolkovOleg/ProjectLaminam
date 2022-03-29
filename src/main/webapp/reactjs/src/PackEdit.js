@@ -20,7 +20,7 @@ class PackEdit extends Component {
 
     async componentDidMount() {
         if (this.props.match.params.id !== 'new') {
-            const pack = await (await fetch(`/packages/${this.props.match.params.id}`)).json();
+            const pack = await (await fetch(`/packages/${this.props.match.params.packId}`)).json();
             this.setState({item: pack});
         }
     }

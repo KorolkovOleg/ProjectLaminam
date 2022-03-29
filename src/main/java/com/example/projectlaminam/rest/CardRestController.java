@@ -20,4 +20,9 @@ public class CardRestController {
     public CardRestController(CardRepository cardRepository) {
         this.cardRepository = cardRepository;
     }
+
+    @GetMapping
+    public List<Card> getCards(@PathVariable("packId") Long packId) {
+        return cardRepository.findAll();
+    }
 }
