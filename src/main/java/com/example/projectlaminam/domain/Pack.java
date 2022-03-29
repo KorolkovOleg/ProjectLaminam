@@ -1,11 +1,15 @@
 package com.example.projectlaminam.domain;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
 @Table(name = "pack")
+@JsonAutoDetect
 public class Pack {
 
     @Id
@@ -14,14 +18,17 @@ public class Pack {
 
     private String name;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "pack", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<Card> cards = new HashSet<>();
 
+    @JsonIgnore
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(     name = "user_package",
             joinColumns = { @JoinColumn(name = "package_id")},
             inverseJoinColumns = { @JoinColumn(name = "user_id")}
     )
+
     private Set<User> users = new HashSet<>();
 
     public Long getId() {
@@ -60,9 +67,6 @@ public class Pack {
     public String toString() {
         return "Pack{" +
                 "id=" + id +
-                ", name='" + name + '\'' +
-                ", cards=" + cards +
-                ", users=" + users +
-                '}';
+                ", name='" + name + '\'';
     }
 }

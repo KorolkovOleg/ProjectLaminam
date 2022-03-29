@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import { Button, ButtonGroup, Container, Table } from 'reactstrap';
-import AppNavbar from './AppNavBar';
-import { Link } from 'react-router-dom';
-import cardEdit from "./CardEdit";
+import CardCreate from "./CardCreate";
 
 class CardList extends Component {
 
@@ -35,10 +33,12 @@ class CardList extends Component {
 
         return (
             <div>
-                <AppNavbar/>
+                <CardCreate packId = {this.props.match.params.packId}/>
                 <Container fluid>
                     <h2>Cards</h2>
-                    {cardList}
+                    <table>
+                        {cardList}
+                    </table>
                 </Container>
             </div>
         );

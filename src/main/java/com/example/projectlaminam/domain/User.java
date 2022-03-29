@@ -1,11 +1,15 @@
 package com.example.projectlaminam.domain;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
 @Table(name = "users")
+@JsonAutoDetect
 public class User {
 
     @Id
@@ -20,6 +24,7 @@ public class User {
             joinColumns = { @JoinColumn(name = "user_id")},
             inverseJoinColumns = { @JoinColumn(name = "package_id")}
     )
+    @JsonIgnore
     private Set<Pack> packages = new HashSet<>();
 
     public Long getId() {

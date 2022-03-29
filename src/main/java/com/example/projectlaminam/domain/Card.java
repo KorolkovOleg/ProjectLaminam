@@ -1,7 +1,11 @@
 package com.example.projectlaminam.domain;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 
+@JsonAutoDetect
 @Entity
 @Table(name = "card")
 public class Card {
@@ -14,6 +18,7 @@ public class Card {
     private String frontSide;
     private String backSide;
 
+    @JsonIgnore
     @ManyToOne
     private Pack pack;
 
