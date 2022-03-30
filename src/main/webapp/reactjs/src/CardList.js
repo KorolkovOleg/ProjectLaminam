@@ -16,18 +16,29 @@ class CardList extends Component {
             .then(data => this.setState({cards : data}));
     }
 
+    async remove(id) {
+        await fetch('/packages/' + this.props.packId + '/cards/' + id, {
+            method: 'DELETE',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            }
+        }).then(() => {
+            let updatedCards = [...this.state.cards].filter(i => i.id !== id);
+            this.setState({cards: updatedCards});
+        });
+    }
+
     render() {
 
         const cardList = this.state.cards.map(card => {
             return <tr key={card.id}>
                 <td style={{whiteSpace: 'nowrap'}}>{card.name} {card.frontSide} {card.backSide}</td>
-                {/*<td>*/}
-                {/*    <ButtonGroup>*/}
-                {/*        <Button size="sm" color="primary" tag={Link} to={"/packages/" + pack.id}>Edit</Button>*/}
-                {/*        <Button size="sm" color="primary" tag={Link} to={"/packages/" + pack.id + "/cards"}>Open</Button>*/}
-                {/*        <Button size="sm" color="danger" onClick={() => this.remove(pack.id)}>Delete</Button>*/}
-                {/*    </ButtonGroup>*/}
-                {/*</td>*/}
+                <td>
+                    <ButtonGroup>
+                        <Button size="sm" color="danger" onClick={() => this.remove(card.id)}>Delete</Button>
+                    </ButtonGroup>
+                </td>
             </tr>
         });
 

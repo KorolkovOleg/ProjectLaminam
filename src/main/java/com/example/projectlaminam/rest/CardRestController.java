@@ -35,4 +35,10 @@ public class CardRestController {
         Card savedCard = cardRepository.save(card);
         return ResponseEntity.ok(savedCard);
     }
+
+    @DeleteMapping("/{cardId}")
+    public ResponseEntity deleteCard(@PathVariable("cardId") Long cardId) {
+        cardRepository.deleteById(cardId);
+        return ResponseEntity.ok().build();
+    }
 }
