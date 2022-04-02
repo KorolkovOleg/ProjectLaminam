@@ -4,6 +4,8 @@ import CardCreate from "./CardCreate";
 import CardElement from "./CardElement";
 import {useCallback} from "react";
 import CardEdit from "./CardEdit";
+import cardSortSelect from "./CardSortSelect";
+import CardSortSelect from "./CardSortSelect";
 
 class CardList extends Component {
 
@@ -18,6 +20,7 @@ class CardList extends Component {
         this.deleteCard = this.deleteCard.bind(this);
         this.putCard = this.putCard.bind(this);
         this.handleEdit = this.handleEdit.bind(this);
+        this.sortCards = this.sortCards.bind(this);
     }
 
     componentDidMount() {
@@ -80,6 +83,17 @@ class CardList extends Component {
         this.setState({editingCard: id});
     }
 
+    sortCards(sortingMode) {
+        let listOfCards = this.state.cards;
+        switch(sortingMode) {
+            case "byIdAscending": listOfCards.sort((a,b) => b.id - a.id); break;
+            case "byIdDescending": listOfCards.sort((a,b) => a.id - b.id); break;
+            case "byLabelStrait": listOfCards.sort((a,b) => new Intl.Collator().compare(b.label, a.label)); break;
+            case "byLabelReverse": listOfCards.sort((a,b) => new Intl.Collator().compare(a.label, b.label)); break;
+        }
+        this.setState({cards: listOfCards});
+    }
+
     render() {
         const cardList = this.state.cards.map(card => {
             let currentElement = null;
@@ -95,6 +109,7 @@ class CardList extends Component {
         return(
             <div className="container p-3">
                 <CardCreate postCard={this.postCard}/>
+                <CardSortSelect sortCards={this.sortCards}/>
                 <div>{cardList}</div>
             </div>
         )

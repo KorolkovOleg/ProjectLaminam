@@ -4,16 +4,12 @@ import com.example.projectlaminam.domain.Card;
 import com.example.projectlaminam.domain.Pack;
 import com.example.projectlaminam.repositories.CardRepository;
 import com.example.projectlaminam.repositories.PackRepository;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 
 import static org.springframework.http.ResponseEntity.ok;
 
@@ -30,21 +26,23 @@ public class CardRestController {
     }
 
     @GetMapping
-    public List<Card> getCards(@PathVariable("packId") Long packId) {
-        return cardRepository.findAll();
+    public List<Card> getCards(@PathVariable("packId") Long packId) throws RuntimeException {
+
+        Pack pack = packRepository.findById(packId).orElseThrow(RuntimeException::new);
+        return cardRepository.findAllByPack(pack);
     }
 
     @PostMapping
-    public ResponseEntity createCard(@RequestBody Card card, @PathVariable("packId") Long packId) throws URISyntaxException {
+    public ResponseEntity<Card> createCard(@RequestBody Card card, @PathVariable("packId") Long packId) throws URISyntaxException, RuntimeException {
 
-        Pack currentPack = packRepository.findById(packId).get();
+        Pack currentPack = packRepository.findById(packId).orElseThrow(RuntimeException::new);
         card.setPack(currentPack);
         Card savedCard = cardRepository.save(card);
         return ResponseEntity.ok(savedCard);
     }
 
     @DeleteMapping("/{cardId}")
-    public ResponseEntity deleteCard(@PathVariable("cardId") Long cardId) {
+    public ResponseEntity<Card> deleteCard(@PathVariable("cardId") Long cardId) {
         cardRepository.deleteById(cardId);
         return ok().build();
     }
