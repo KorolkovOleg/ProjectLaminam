@@ -1,58 +1,55 @@
-import React, { Component } from 'react';
+import React, { Component} from 'react';
 import { Button, ButtonGroup, Container, Table } from 'reactstrap';
 import CardCreate from "./CardCreate";
+import CardElement from "./CardElement";
+import {useCallback} from "react";
 
 class CardList extends Component {
 
     constructor(props) {
         super(props);
-        this.state = {cards: []};
-        // this.remove = this.remove.bind(this);
+        this.state = {
+            cards: []
+        }
+
+        this.postCard = this.postCard.bind(this);
     }
 
     componentDidMount() {
-        fetch('/packages/' + this.props.match.params.packId + '/cards')
+        fetch('/packages/' + this.props.match.params.packId + '/cards/')
             .then(response => response.json())
-            .then(data => this.setState({cards : data}));
+            .then(data => this.setState({cards: data}));
     }
 
-    async remove(id) {
-        await fetch('/packages/' + this.props.packId + '/cards/' + id, {
-            method: 'DELETE',
+    async postCard(card) {
+        const rawResponse = await fetch('/packages/' + this.props.match.params.packId + '/cards', {
+            method: 'POST',
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
-            }
-        }).then(() => {
-            let updatedCards = [...this.state.cards].filter(i => i.id !== id);
-            this.setState({cards: updatedCards});
+            },
+            body: JSON.stringify(card)
         });
+        const content = await rawResponse.json();
+
+        let currentCards = this.state.cards;
+        currentCards.push(content);
+        this.setState({cards: currentCards});
     }
 
     render() {
-
         const cardList = this.state.cards.map(card => {
-            return <tr key={card.id}>
-                <td style={{whiteSpace: 'nowrap'}}>{card.name} {card.frontSide} {card.backSide}</td>
-                <td>
-                    <ButtonGroup>
-                        <Button size="sm" color="danger" onClick={() => this.remove(card.id)}>Delete</Button>
-                    </ButtonGroup>
-                </td>
-            </tr>
+           return(
+             <CardElement key={card.id} card={card}/>
+           );
         });
 
-        return (
-            <div>
-                <CardCreate packId = {this.props.match.params.packId}/>
-                <Container fluid>
-                    <h2>Cards</h2>
-                    <table>
-                        {cardList}
-                    </table>
-                </Container>
+        return(
+            <div className="container p-3">
+                <CardCreate postCard={this.postCard}/>
+                <div>{cardList}</div>
             </div>
-        );
+        )
     }
 }
 export default CardList;

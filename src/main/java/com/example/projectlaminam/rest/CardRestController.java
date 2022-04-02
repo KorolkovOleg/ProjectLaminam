@@ -4,11 +4,16 @@ import com.example.projectlaminam.domain.Card;
 import com.example.projectlaminam.domain.Pack;
 import com.example.projectlaminam.repositories.CardRepository;
 import com.example.projectlaminam.repositories.PackRepository;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URISyntaxException;
 import java.util.List;
+
+import static org.springframework.http.ResponseEntity.ok;
 
 @RestController
 @RequestMapping("/packages/{packId}/cards")
@@ -39,6 +44,6 @@ public class CardRestController {
     @DeleteMapping("/{cardId}")
     public ResponseEntity deleteCard(@PathVariable("cardId") Long cardId) {
         cardRepository.deleteById(cardId);
-        return ResponseEntity.ok().build();
+        return ok().build();
     }
 }

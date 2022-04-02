@@ -5,16 +5,17 @@ import {Link} from "react-router-dom";
 class CardCreate extends Component {
 
     emptyItem = {
-        label: '',
-        frontSide: '',
-        backSide: ''
+        label: "",
+        frontSide: "",
+        backSide: ""
     }
 
     constructor(props) {
         super(props);
         this.state = {
             item: this.emptyItem
-        };
+        }
+
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
@@ -23,54 +24,40 @@ class CardCreate extends Component {
         const target = event.target;
         const value = target.value;
         const name = target.name;
-        let item = this.state.item;
+        let item = {...this.state.item};
         item[name] = value;
         this.setState({item});
     }
 
-    async handleSubmit(event) {
+    handleSubmit(event) {
         event.preventDefault();
-        const {item} = this.state;
-
-        await fetch('/packages/' + this.props.packId + '/cards', {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(item),
-        });
-        // this.props.history.push('/clients');
+        this.props.postCard(this.state.item);
+        this.setState({item: this.emptyItem});
     }
 
     render() {
-        return(
-            <div>
-            <Container>
-                <Form onSubmit={this.handleSubmit}>
-                    <FormGroup>
-                        <Label for="label">Label</Label>
-                        <Input type="text" name="label" id="label"
-                               onChange={this.handleChange} autoComplete="label"/>
-                    </FormGroup>
-                    <FormGroup>
-                        <Label for="frontSide">Front side</Label>
-                        <Input type="text" name="frontSide" id="frontSide"
-                               onChange={this.handleChange} autoComplete="frontSide"/>
-                    </FormGroup>
-                    <FormGroup>
-                        <Label for="backSide">Back side</Label>
-                        <Input type="text" name="backSide" id="backSide"
-                               onChange={this.handleChange} autoComplete="backSide"/>
-                    </FormGroup>
-                    <FormGroup>
-                        <Button color="primary" type="submit">Save</Button>{' '}
-                    </FormGroup>
-                </Form>
-            </Container>
-        </div>
+        return (
+            <form onSubmit={this.handleSubmit}>
+                <div className="card p-1">
+                    <div className="row gx-1">
+                        <div className="col">
+                            <input className="p-2 border bg-light container-fluid" name="label" id="label" onChange={this.handleChange} value={this.state.item.label}/>
+                        </div>
+                        <div className="col">
+                            <input className="p-2 border bg-light container-fluid" name="frontSide" id="frontSide" onChange={this.handleChange} value={this.state.item.frontSide}/>
+                        </div>
+                        <div className="col">
+                            <input className="p-2 border bg-light container-fluid" name="backSide" id="backSide" onChange={this.handleChange} value={this.state.item.backSide}/>
+                        </div>
+                    </div>
+                    <div className="row gx-1">
+                        <div className="col-2 gy-1">
+                            <Button className="p-1" type="submit">Submit</Button>
+                        </div>
+                    </div>
+                </div>
+            </form>
         );
-
     }
 
 }
