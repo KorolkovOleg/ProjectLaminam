@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URISyntaxException;
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
 import static org.springframework.http.ResponseEntity.ok;
 
@@ -45,5 +47,21 @@ public class CardRestController {
     public ResponseEntity deleteCard(@PathVariable("cardId") Long cardId) {
         cardRepository.deleteById(cardId);
         return ok().build();
+    }
+
+    @PutMapping("/{cardId}")
+    public ResponseEntity<Card> updateCard(@RequestBody Card card,
+                                           @PathVariable("cardId") Long cardId,
+                                           @PathVariable("packId") Long packId) {
+
+        if (card != null && Objects.equals(card.getId(), cardId)) {
+            Card currentCard = cardRepository.findById(card.getId()).orElseThrow(RuntimeException::new);
+            currentCard.setLabel(card.getLabel());
+            currentCard.setFrontSide(card.getFrontSide());
+            currentCard.setBackSide(card.getBackSide());
+            currentCard = cardRepository.save(currentCard);
+            return ResponseEntity.ok(currentCard);
+        }
+        return ResponseEntity.notFound().build();
     }
 }

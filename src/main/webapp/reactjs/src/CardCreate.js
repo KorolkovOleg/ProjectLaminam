@@ -52,13 +52,12 @@ class CardCreate extends Component {
                     </div>
                     <div className="row gx-1">
                         <div className="col-2 gy-1">
-                            <Button className="p-1" type="submit">Submit</Button>
+                            <Button className="p-1" type="submit">Create</Button>
                         </div>
                     </div>
                 </div>
             </form>
         );
     }
-
 }
 export default CardCreate;
