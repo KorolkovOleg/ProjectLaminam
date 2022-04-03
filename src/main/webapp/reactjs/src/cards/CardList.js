@@ -86,10 +86,10 @@ class CardList extends Component {
     sortCards(sortingMode) {
         let listOfCards = this.state.cards;
         switch(sortingMode) {
-            case "byIdAscending": listOfCards.sort((a,b) => b.id - a.id); break;
-            case "byIdDescending": listOfCards.sort((a,b) => a.id - b.id); break;
-            case "byLabelStrait": listOfCards.sort((a,b) => new Intl.Collator().compare(b.label, a.label)); break;
-            case "byLabelReverse": listOfCards.sort((a,b) => new Intl.Collator().compare(a.label, b.label)); break;
+            case "byIdAscending": listOfCards.sort((a,b) => a.id - b.id); break;
+            case "byIdDescending": listOfCards.sort((a,b) => b.id - a.id); break;
+            case "byLabelStrait": listOfCards.sort((a,b) => new Intl.Collator().compare(a.label, b.label)); break;
+            case "byLabelReverse": listOfCards.sort((a,b) => new Intl.Collator().compare(b.label, a.label)); break;
         }
         this.setState({cards: listOfCards});
     }

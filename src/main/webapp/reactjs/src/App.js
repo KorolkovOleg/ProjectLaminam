@@ -2,9 +2,9 @@ import React, { Component } from 'react';
 import './App.css';
 import Home from './Home';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import PackList from './PackList';
-import PackEdit from "./PackEdit";
-import CardList from "./CardList";
+import PackList from './packages/PackList';
+import PackEdit from "./packages/PackEdit";
+import CardList from "./cards/CardList";
 
 class App extends Component {
     render() {

@@ -12,7 +12,7 @@ class CardSortSelect extends Component {
 
     handleChange(event) {
         this.setState({sortingMode: event.target.value})
-        this.props.sortCards(this.state.sortingMode);
+        this.props.sortCards(event.target.value);
     }
 
     render() {
