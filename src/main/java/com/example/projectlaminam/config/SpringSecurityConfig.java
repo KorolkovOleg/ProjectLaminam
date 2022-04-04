@@ -1,10 +1,16 @@
 package com.example.projectlaminam.config;
 
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 
 @Configuration
 @EnableWebSecurity
@@ -12,18 +18,23 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http
-                .csrf().disable()
-                .authorizeRequests()
-                .antMatchers("/**").permitAll()
-                .antMatchers("/packages/**").permitAll()
-                .antMatchers(HttpMethod.POST, "/packages/").permitAll()
-                .antMatchers(HttpMethod.PUT, "/packages/").permitAll()
-                .antMatchers(HttpMethod.DELETE, "/packages/**").permitAll()
-                .antMatchers("/packages/**/cards").permitAll()
-                .antMatchers(HttpMethod.POST, "/packages/**/cards").permitAll()
-                .antMatchers(HttpMethod.DELETE, "/packages/**/cards/**").permitAll()
-                .antMatchers(HttpMethod.PUT, "/packages/**/cards/**").permitAll();
+        super.configure(http);
+    }
 
+    @Bean
+    @Override
+    protected UserDetailsService userDetailsService() {
+        return new InMemoryUserDetailsManager(
+                User.builder()
+                        .username("admin")
+                        .password(passwordEncoder().encode("admin"))
+                        .roles("ADMIN")
+                        .build()
+        );
+    }
+
+    @Bean
+    protected PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder(12);
     }
 }
