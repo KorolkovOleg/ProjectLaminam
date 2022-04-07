@@ -44,6 +44,7 @@ class PackEdit extends Component {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             },
+            credentials: "include",
             body: JSON.stringify(item),
         });
         this.props.history.push('/packages');

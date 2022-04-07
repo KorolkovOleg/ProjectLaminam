@@ -12,7 +12,7 @@ class PackList extends Component {
     }
 
     componentDidMount() {
-        fetch('/packages')
+        fetch('/packages', {credentials: "include"})
             .then(response => response.json())
             .then(data => this.setState({packages: data}));
     }
@@ -23,7 +23,8 @@ class PackList extends Component {
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
-            }
+            },
+            credentials: "include"
         }).then(() => {
             let updatedPackages = [...this.state.packages].filter(i => i.id !== id);
             this.setState({packages: updatedPackages});

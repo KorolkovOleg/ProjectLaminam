@@ -5,6 +5,8 @@ import com.example.projectlaminam.domain.User;
 import com.example.projectlaminam.repositories.UserRepository;
 import com.example.projectlaminam.security.JwtTokenProvider;
 import com.example.projectlaminam.security.Role;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -17,8 +19,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -30,24 +34,35 @@ public class AuthenticationRestController {
     private UserRepository userRepository;
     private JwtTokenProvider jwtTokenProvider;
 
+    @Value("${jwt.header}")
+    private String authorizationHeader;
+
     public AuthenticationRestController(AuthenticationManager authenticationManager, UserRepository userRepository, JwtTokenProvider jwtTokenProvider) {
         this.authenticationManager = authenticationManager;
         this.userRepository = userRepository;
         this.jwtTokenProvider = jwtTokenProvider;
+
+
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> authenticate(@RequestBody AuthenticationRequestDTO request) {
+    public ResponseEntity<?> authenticate(@RequestBody AuthenticationRequestDTO request, HttpServletResponse response) {
 
         try{
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
             User user = userRepository.findByUsername(request.getUsername()).orElseThrow(() -> new UsernameNotFoundException("User not found"));
             String token = jwtTokenProvider.createToken(request.getUsername(), Role.USER.name());
-            Map<Object, Object> response = new HashMap<>();
-            response.put("username", request.getUsername());
-            response.put("token", token);
+            Map<Object, Object> responseBody = new HashMap<>();
+            responseBody.put("username", request.getUsername());
+            responseBody.put("token", token);
 
-            return ResponseEntity.ok(response);
+            Cookie cookie = new Cookie("Authorisation", token);
+            cookie.setPath("/");
+            cookie.setHttpOnly(true);
+            response.addCookie(cookie);
+            response.setContentType("text/plain");
+
+            return ResponseEntity.ok(responseBody);
         } catch (AuthenticationException e) {
             return new ResponseEntity<>("Invalid username or login", HttpStatus.FORBIDDEN);
         }

@@ -24,7 +24,7 @@ class CardList extends Component {
     }
 
     componentDidMount() {
-        fetch('/packages/' + this.props.match.params.packId + '/cards/')
+        fetch('/packages/' + this.props.match.params.packId + '/cards/', {credentials: "include"})
             .then(response => response.json())
             .then(data => this.setState({cards: data}));
     }
@@ -36,6 +36,7 @@ class CardList extends Component {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             },
+            credentials: "include",
             body: JSON.stringify(card)
         });
         const content = await rawResponse.json();
@@ -52,6 +53,7 @@ class CardList extends Component {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             },
+            credentials: "include",
             body: JSON.stringify(card)
         });
         const content = await rawResponse.json();
@@ -72,7 +74,8 @@ class CardList extends Component {
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
-            }
+            },
+            credentials: "include"
         }).then(() => {
             let updatedCards = [...this.state.cards].filter(i => i.id !== id);
             this.setState({cards: updatedCards});
