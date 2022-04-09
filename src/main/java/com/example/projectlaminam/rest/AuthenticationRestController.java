@@ -5,6 +5,7 @@ import com.example.projectlaminam.domain.User;
 import com.example.projectlaminam.repositories.UserRepository;
 import com.example.projectlaminam.security.JwtTokenProvider;
 import com.example.projectlaminam.security.Role;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -13,6 +14,8 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -33,6 +36,7 @@ public class AuthenticationRestController {
     private final AuthenticationManager authenticationManager;
     private UserRepository userRepository;
     private JwtTokenProvider jwtTokenProvider;
+    private PasswordEncoder passwordEncoder;
 
     @Value("${jwt.header}")
     private String authorizationHeader;
@@ -72,5 +76,17 @@ public class AuthenticationRestController {
     public void logout(HttpServletRequest request, HttpServletResponse response) {
         SecurityContextLogoutHandler securityContextLogoutHandler = new SecurityContextLogoutHandler();
         securityContextLogoutHandler.logout(request, response, null);
+    }
+
+    @PostMapping("/register")
+    public ResponseEntity register(@RequestBody User user) {
+        if(userRepository.findByUsername(user.getUsername()).isPresent()) {
+            return new ResponseEntity("Username already exist", HttpStatus.CONFLICT);
+        }
+
+        user.setPassword(new BCryptPasswordEncoder(12).encode(user.getPassword()));
+        User savedUser = userRepository.save(user);
+
+        return ResponseEntity.ok(savedUser);
     }
 }

@@ -1,5 +1,4 @@
 import {Component} from "react";
-import Cookies from 'universal-cookie';
 
 class Login extends Component {
 
@@ -8,11 +7,11 @@ class Login extends Component {
         super(props);
 
         this.state = {
+            authenticationError: false,
             user: {
                 username: "",
                 password: ""
             }
-
         }
 
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -29,12 +28,11 @@ class Login extends Component {
             credentials: 'include',
             body: JSON.stringify(this.state.user)
         });
-        const content = await rawResponse.json();
-        alert(JSON.stringify(content));
-        //
-        // let currentCards = this.state.cards;
-        // currentCards.unshift(content);
-        // this.setState({cards: currentCards});
+        if(rawResponse.ok) {
+            this.setState({authenticationError: false});
+        } else {
+            this.setState({authenticationError: true});
+        }
 
     }
 
@@ -48,9 +46,17 @@ class Login extends Component {
     }
 
     render() {
+
+        let authError = (
+                            <div hidden={!this.state.authenticationError} className="alert alert-danger" role="alert">
+                                Invalid username or password
+                            </div>
+                        )
+
         return (
             <div>
                 <form onSubmit={this.handleSubmit}>
+                    {authError}
                     <input onChange={this.handleChange} name="username" id="username" value={this.state.user.username}/>
                     <input onChange={this.handleChange} name="password" id="password" value={this.state.user.password}/>
                     <button type="submit">Login</button>
