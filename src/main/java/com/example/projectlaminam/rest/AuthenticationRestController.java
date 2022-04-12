@@ -76,6 +76,12 @@ public class AuthenticationRestController {
     public void logout(HttpServletRequest request, HttpServletResponse response) {
         SecurityContextLogoutHandler securityContextLogoutHandler = new SecurityContextLogoutHandler();
         securityContextLogoutHandler.logout(request, response, null);
+
+        Cookie cookie = new Cookie("Authorisation", null);
+        cookie.setPath("/");
+        cookie.setHttpOnly(true);
+        cookie.setMaxAge(0);
+        response.addCookie(cookie);
     }
 
     @PostMapping("/register")

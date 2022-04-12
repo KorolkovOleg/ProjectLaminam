@@ -1,4 +1,5 @@
 import {Component} from "react";
+import LogoutButton from "./LogoutButton";
 
 class Login extends Component {
 
@@ -55,6 +56,7 @@ class Login extends Component {
 
         return (
             <div>
+                <LogoutButton/>
                 <form onSubmit={this.handleSubmit}>
                     {authError}
                     <input onChange={this.handleChange} name="username" id="username" value={this.state.user.username}/>
