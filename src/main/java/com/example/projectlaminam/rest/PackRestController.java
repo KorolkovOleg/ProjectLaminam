@@ -35,16 +35,19 @@ public class PackRestController {
     }
 
     @GetMapping("/{packId}")
-    public Pack getPack(@PathVariable("packId") Long id, @AuthenticationPrincipal UserDetails user) {
+    public Pack getPack(@PathVariable("packId") Long id,
+                        @AuthenticationPrincipal UserDetails user) {
         Pack pack = packRepository.findById(id).orElseThrow(RuntimeException::new);
-        if(pack.getUsers().stream().anyMatch(u -> u.getUsername().equals(user.getUsername()))) {
-            return pack;
+        if(pack.getUsers().stream().noneMatch(u -> u.getUsername().equals(user.getUsername()))) {
+            return null;
         }
-        return null;
+
+        return pack;
     }
 
     @PostMapping
-    public ResponseEntity createPack(@RequestBody Pack pack, @AuthenticationPrincipal UserDetails userDetails) throws URISyntaxException {
+    public ResponseEntity<Pack> createPack(@RequestBody Pack pack,
+                                     @AuthenticationPrincipal UserDetails userDetails) throws URISyntaxException {
         User user = userRepository.findByUsername(userDetails.getUsername()).orElseThrow(RuntimeException::new);
         pack.getUsers().add(user);
         Pack savedPack = packRepository.save(pack);
@@ -52,27 +55,31 @@ public class PackRestController {
     }
 
     @PutMapping("/{packId}")
-    public ResponseEntity updatePack(@PathVariable("packId") Long id, @RequestBody Pack pack, @AuthenticationPrincipal UserDetails user) {
+    public ResponseEntity<Pack> updatePack(@PathVariable("packId") Long id,
+                                     @RequestBody Pack pack,
+                                     @AuthenticationPrincipal UserDetails user) {
         System.out.println(pack);
         Pack currentPack = packRepository.findById(id).orElseThrow(RuntimeException::new);
-        if(currentPack.getUsers().stream().anyMatch(u -> u.getUsername().equals(user.getUsername()))) {
-            currentPack.setName(pack.getName());
-            currentPack = packRepository.save(currentPack);
-            System.out.println(currentPack);
-            return ResponseEntity.ok(currentPack);
+        if(currentPack.getUsers().stream().noneMatch(u -> u.getUsername().equals(user.getUsername()))) {
+            return ResponseEntity.status(403).build();
         }
-        return ResponseEntity.status(403).build();
+
+        currentPack.setName(pack.getName());
+        currentPack = packRepository.save(currentPack);
+        System.out.println(currentPack);
+        return ResponseEntity.ok(currentPack);
     }
 
     @DeleteMapping("/{packId}")
-    public ResponseEntity deleteClient(@PathVariable("packId") Long id, @AuthenticationPrincipal UserDetails user) {
+    public ResponseEntity deleteClient(@PathVariable("packId") Long id,
+                                       @AuthenticationPrincipal UserDetails user) {
         Pack currentPack = packRepository.findById(id).orElseThrow(RuntimeException::new);
-        if(currentPack.getUsers().stream().anyMatch(u -> u.getUsername().equals(user.getUsername()))) {
-            packRepository.deleteById(id);
-            return ResponseEntity.ok().build();
+        if(currentPack.getUsers().stream().noneMatch(u -> u.getUsername().equals(user.getUsername()))) {
+            return ResponseEntity.status(403).build();
         }
-        return ResponseEntity.status(403).build();
 
+        packRepository.deleteById(id);
+        return ResponseEntity.ok().build();
     }
 
 }
