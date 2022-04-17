@@ -1,4 +1,7 @@
-import {Component} from "react";
+import React, {Component} from "react";
+import AppNavbar from "../AppNavBar";
+import {Button} from "reactstrap";
+import {Link, Redirect} from "react-router-dom";
 
 class Register extends Component {
 
@@ -8,7 +11,7 @@ class Register extends Component {
         this.state = {
             errorText: "",
             isError: false,
-
+            isRegisterSuccess: false,
             user: {
                 username: "",
                 password: "",
@@ -37,7 +40,7 @@ class Register extends Component {
                     errorText: "Username already exist"
                 });
             } else {
-                this.setState({isError: false});
+                this.setState({isError: false, isRegisterSuccess: true})
             }
         }
     }
@@ -81,15 +84,35 @@ class Register extends Component {
             </div>
         )
 
+        if(this.state.isRegisterSuccess) {
+            return <Redirect to="/auth/login"/>
+        }
+
         return (
             <div>
-                <form onSubmit={this.handleSubmit}>
-                    {error}
-                    <input onChange={this.handleChange} name="username" id="username" value={this.state.user.username}/>
-                    <input onChange={this.handleChange} name="password" id="password" value={this.state.user.password}/>
-                    <input onChange={this.handleChange} name="passwordRepeat" id="passwordRepeat" value={this.state.user.passwordRepeat}/>
-                    <button type="submit">Login</button>
-                </form>
+                <AppNavbar/>
+                <div className="d-flex justify-content-center">
+                    <div className="col-4">
+                        <form onSubmit={this.handleSubmit} role="form">
+                            {error}
+                            <div className="form-group pt-5 ">
+                                <label htmlFor="username" className="form-label" >Username</label>
+                                <input className="form-control" onChange={this.handleChange} name="username" id="username" value={this.state.user.username}/>
+                            </div>
+                            <div className="form-group pt-4 ">
+                                <label htmlFor="password" className="form-label" >Password</label>
+                                <input className="form-control" onChange={this.handleChange} name="password" id="password" value={this.state.user.password}/>
+                            </div>
+                            <div className="form-group pt-4 ">
+                                <label htmlFor="passwordRepeat" className="form-label" >Confirm password</label>
+                                <input className="form-control" onChange={this.handleChange} name="passwordRepeat" id="passwordRepeat" value={this.state.user.passwordRepeat}/>
+                            </div>
+                            <div className="button-group pt-5 d-grid gap-2 d-md-flex ">
+                                <Button type="submit" color="primary" outline="true">Register</Button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
             </div>
         );
     }
