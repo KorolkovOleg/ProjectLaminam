@@ -1,6 +1,6 @@
 import React, {Component} from "react";
 import LogoutButton from "./LogoutButton";
-import {Link} from "react-router-dom";
+import {Link, Redirect} from "react-router-dom";
 import {Button} from "reactstrap";
 import AppNavbar from "../AppNavBar";
 
@@ -15,7 +15,8 @@ class Login extends Component {
             user: {
                 username: "",
                 password: ""
-            }
+            },
+            isAuthenticationSuccess: false
         }
 
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -33,7 +34,7 @@ class Login extends Component {
             body: JSON.stringify(this.state.user)
         });
         if(rawResponse.ok) {
-            this.setState({authenticationError: false});
+            this.setState({authenticationError: false, isAuthenticationSuccess: true});
         } else {
             this.setState({authenticationError: true});
         }
@@ -56,6 +57,10 @@ class Login extends Component {
                                 Invalid username or password
                             </div>
                         )
+
+        if(this.state.isAuthenticationSuccess) {
+                return <Redirect to="/"/>
+        }
 
         return (
             <div>

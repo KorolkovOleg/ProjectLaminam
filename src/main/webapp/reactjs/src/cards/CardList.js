@@ -27,6 +27,7 @@ class CardList extends Component {
         fetch('/packages/' + this.props.match.params.packId + '/cards/', {credentials: "include"})
             .then(response => response.json())
             .then(data => this.setState({cards: data}));
+        
     }
 
     async postCard(card) {

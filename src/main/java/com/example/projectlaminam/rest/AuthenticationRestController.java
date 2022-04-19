@@ -60,10 +60,15 @@ public class AuthenticationRestController {
             responseBody.put("username", request.getUsername());
             responseBody.put("token", token);
 
-            Cookie cookie = new Cookie("Authorisation", token);
-            cookie.setPath("/");
-            cookie.setHttpOnly(true);
-            response.addCookie(cookie);
+            Cookie tokenCookie = new Cookie("Authorisation", token);
+            tokenCookie.setPath("/");
+            tokenCookie.setHttpOnly(true);
+            response.addCookie(tokenCookie);
+
+            Cookie isAuthorisedCookie = new Cookie("isAuthorised", "true");
+            isAuthorisedCookie.setPath("/");
+            isAuthorisedCookie.setHttpOnly(false);
+            response.addCookie(isAuthorisedCookie);
             response.setContentType("text/plain");
 
             return ResponseEntity.ok(responseBody);
@@ -77,11 +82,17 @@ public class AuthenticationRestController {
         SecurityContextLogoutHandler securityContextLogoutHandler = new SecurityContextLogoutHandler();
         securityContextLogoutHandler.logout(request, response, null);
 
-        Cookie cookie = new Cookie("Authorisation", null);
-        cookie.setPath("/");
-        cookie.setHttpOnly(true);
-        cookie.setMaxAge(0);
-        response.addCookie(cookie);
+        Cookie tokenCookie = new Cookie("Authorisation", null);
+        tokenCookie.setPath("/");
+        tokenCookie.setHttpOnly(true);
+        tokenCookie.setMaxAge(0);
+        response.addCookie(tokenCookie);
+
+        Cookie isAuthorisedCookie = new Cookie("isAuthorised", null);
+        isAuthorisedCookie.setPath("/");
+        isAuthorisedCookie.setHttpOnly(false);
+        isAuthorisedCookie.setMaxAge(0);
+        response.addCookie(isAuthorisedCookie);
     }
 
     @PostMapping("/register")

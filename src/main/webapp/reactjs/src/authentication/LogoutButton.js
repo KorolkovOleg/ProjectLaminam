@@ -1,5 +1,6 @@
-import {Component} from "react";
+import React, {Component} from "react";
 import {Button} from "reactstrap";
+import {Redirect} from "react-router-dom";
 
 class LogoutButton extends Component {
 
@@ -8,6 +9,10 @@ class LogoutButton extends Component {
         super(props, context);
 
         this.logoutHandler = this.logoutHandler.bind(this);
+
+        this.state = {
+            isLogout: false
+        }
     }
 
 
@@ -19,9 +24,15 @@ class LogoutButton extends Component {
             },
             credentials: 'include',
         });
+        this.setState({isLogout: true});
     }
 
     render() {
+
+        if(this.state.isLogout) {
+            return <Redirect to="/"/>;
+        }
+
         return (
             <Button onClick={this.logoutHandler}>Logout</Button>
         )
