@@ -6,6 +6,7 @@ import {useCallback} from "react";
 import CardEdit from "./CardEdit";
 import cardSortSelect from "./CardSortSelect";
 import CardSortSelect from "./CardSortSelect";
+import AppNavbar from "../AppNavBar";
 
 class CardList extends Component {
 
@@ -27,7 +28,7 @@ class CardList extends Component {
         fetch('/packages/' + this.props.match.params.packId + '/cards/', {credentials: "include"})
             .then(response => response.json())
             .then(data => this.setState({cards: data}));
-        
+
     }
 
     async postCard(card) {
@@ -111,10 +112,13 @@ class CardList extends Component {
         });
 
         return(
-            <div className="container p-3">
-                <CardCreate postCard={this.postCard}/>
-                <CardSortSelect sortCards={this.sortCards}/>
-                <div>{cardList}</div>
+            <div>
+                <AppNavbar/>
+                <div className="container p-3">
+                    <CardCreate postCard={this.postCard}/>
+                    <CardSortSelect sortCards={this.sortCards}/>
+                    <div>{cardList}</div>
+                </div>
             </div>
         )
     }

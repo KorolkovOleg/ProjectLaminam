@@ -32,14 +32,10 @@ class CardElement extends Component {
                         <div className="p-3 border bg-light">{this.props.card.backSide}</div>
                     </div>
                 </div>
-                <div className="row gx-1">
-                    <div className="col-2 gy-1">
-                        <Button className="p-1" color="danger" onClick={this.handleDelete}>Delete</Button>
-                    </div>
-                    <div className="col-2 gy-1">
-                        <Button className="p-1" color="secondary" onClick={this.handleEdit}>Edit</Button>
-                    </div>
-                </div>
+                <ButtonGroup>
+                    <Button color="danger" onClick={this.handleDelete}>Delete</Button>
+                    <Button color="secondary" onClick={this.handleEdit}>Edit</Button>
+                </ButtonGroup>
             </div>
         );
     }

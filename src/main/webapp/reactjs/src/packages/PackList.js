@@ -44,6 +44,7 @@ class PackList extends Component {
                 <td>
                     <ButtonGroup>
                         <Button size="sm" color="primary" tag={Link} to={"/packages/" + pack.id}>Edit</Button>
+                        <Button size="sm" color="primary" tag={Link} to={"/packages/" + pack.id + "/viewer"}>Viewer</Button>
                         <Button size="sm" color="primary" tag={Link} to={"/packages/" + pack.id + "/cards"}>Open</Button>
                         <Button size="sm" color="danger" onClick={() => this.remove(pack.id)}>Delete</Button>
                     </ButtonGroup>

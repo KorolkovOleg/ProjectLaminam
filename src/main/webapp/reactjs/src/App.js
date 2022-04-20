@@ -9,6 +9,7 @@ import Login from "./authentication/Login";
 import Register from "./authentication/Register";
 import PrivateRoute from "./Routes/PrivateRoute";
 import PublicRoute from "./Routes/PublicRoute";
+import CardViewer from "./cards/cardviewer/CardViewer";
 
 class App extends Component {
 
@@ -25,6 +26,7 @@ class App extends Component {
                     <PrivateRoute isAuthenticated={isAuth} path='/packages' exact={true} component={PackList}/>
                     <PrivateRoute isAuthenticated={isAuth} path='/packages/:packId' exact={true} component={PackEdit}/>
                     <PrivateRoute isAuthenticated={isAuth} path='/packages/:packId/cards' component={CardList}/>
+                    <PrivateRoute isAuthenticated={isAuth} path='/packages/:packId/viewer' component={CardViewer}/>
                     <PublicRoute isAuthenticated={isAuth} path='/auth/login' component={Login}/>
                     <PublicRoute isAuthenticated={isAuth} path='/auth/register' component={Register}/>
                 </Switch>
