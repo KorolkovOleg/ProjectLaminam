@@ -9,10 +9,16 @@ class CardViewerElement extends Component {
         this.state = {
             isFrontSide: true
         }
+
+        this.turnOver = this.turnOver.bind(this);
+    }
+
+    turnOver() {
+        let currentIsFrontSide = this.state.isFrontSide;
+        this.setState({isFrontSide: !currentIsFrontSide});
     }
 
     render() {
-
         let currentSide = this.state.isFrontSide ? (
             <div className="card-body">
                 <p className="card-text">{this.props.card.frontSide}</p>
@@ -24,11 +30,16 @@ class CardViewerElement extends Component {
         )
 
         return(
-            <div className="card text-center">
+            <div className="card text-center"  style={{minHeight: "30rem"}}>
                 <div className="card-header">
                     {this.props.card.label}
                 </div>
                 {currentSide}
+                <ButtonGroup>
+                    <Button className="primary" onClick={this.props.handlePreviousCard}>Previous card</Button>
+                    <Button className="primary" onClick={this.turnOver}>Turn over</Button>
+                    <Button className="primary" onClick={this.props.handleNextCard}>Next card</Button>
+                </ButtonGroup>
             </div>
         );
     }
