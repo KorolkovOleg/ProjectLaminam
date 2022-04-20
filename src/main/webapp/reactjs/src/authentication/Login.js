@@ -15,8 +15,7 @@ class Login extends Component {
             user: {
                 username: "",
                 password: ""
-            },
-            isAuthenticationSuccess: false
+            }
         }
 
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -35,6 +34,7 @@ class Login extends Component {
         });
         if(rawResponse.ok) {
             this.setState({authenticationError: false, isAuthenticationSuccess: true});
+            document.location.reload();
         } else {
             this.setState({authenticationError: true});
         }
@@ -57,10 +57,6 @@ class Login extends Component {
                                 Invalid username or password
                             </div>
                         )
-
-        if(this.state.isAuthenticationSuccess) {
-                return <Redirect to="/"/>
-        }
 
         return (
             <div>

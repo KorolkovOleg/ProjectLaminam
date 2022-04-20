@@ -10,9 +10,6 @@ class LogoutButton extends Component {
 
         this.logoutHandler = this.logoutHandler.bind(this);
 
-        this.state = {
-            isLogout: false
-        }
     }
 
 
@@ -24,14 +21,10 @@ class LogoutButton extends Component {
             },
             credentials: 'include',
         });
-        this.setState({isLogout: true});
+        document.location.reload();
     }
 
     render() {
-
-        if(this.state.isLogout) {
-            return <Redirect to="/"/>;
-        }
 
         return (
             <Button onClick={this.logoutHandler}>Logout</Button>
