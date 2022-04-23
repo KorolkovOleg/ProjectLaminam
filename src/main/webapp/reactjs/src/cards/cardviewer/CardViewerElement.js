@@ -1,5 +1,6 @@
 import React, {Component} from "react";
 import {Button, ButtonGroup} from "reactstrap";
+import CardRepeatManager from "./CardRepeatManager";
 
 class CardViewerElement extends Component {
 

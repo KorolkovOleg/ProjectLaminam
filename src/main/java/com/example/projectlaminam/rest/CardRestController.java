@@ -10,6 +10,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URISyntaxException;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
@@ -49,6 +50,7 @@ public class CardRestController {
         }
 
         card.setPack(currentPack);
+        card.setNextRepeatDate(new Date());
         Card savedCard = cardRepository.save(card);
         return ResponseEntity.ok(savedCard);
     }
@@ -84,6 +86,7 @@ public class CardRestController {
         currentCard.setLabel(card.getLabel());
         currentCard.setFrontSide(card.getFrontSide());
         currentCard.setBackSide(card.getBackSide());
+        currentCard.setNextRepeatDate(card.getNextRepeatDate());
         currentCard = cardRepository.save(currentCard);
 
         return ResponseEntity.ok(currentCard);

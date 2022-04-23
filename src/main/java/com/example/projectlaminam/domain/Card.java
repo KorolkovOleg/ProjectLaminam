@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
+import java.util.Date;
 
 @JsonAutoDetect
 @Entity
@@ -17,6 +18,7 @@ public class Card {
     private String label;
     private String frontSide;
     private String backSide;
+    private Date nextRepeatDate;
 
     @JsonIgnore
     @ManyToOne
@@ -60,5 +62,13 @@ public class Card {
 
     public void setPack(Pack pack) {
         this.pack = pack;
+    }
+
+    public Date getNextRepeatDate() {
+        return nextRepeatDate;
+    }
+
+    public void setNextRepeatDate(Date nextRepeatDate) {
+        this.nextRepeatDate = nextRepeatDate;
     }
 }

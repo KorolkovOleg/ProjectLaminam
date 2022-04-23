@@ -1,9 +1,8 @@
 import React, {Component} from "react";
 import CardViewerElement from "./CardViewerElement";
-import CardElement from "../CardElement";
-import cardViewerElement from "./CardViewerElement";
 import {Container} from "reactstrap";
 import AppNavbar from "../../AppNavBar";
+import CardRepeatManager from "./CardRepeatManager";
 
 class CardViewer extends Component {
 
@@ -18,12 +17,27 @@ class CardViewer extends Component {
 
         this.handleNextCard = this.handleNextCard.bind(this);
         this.handlePreviousCard = this.handlePreviousCard.bind(this);
+        this.putCard = this.putCard.bind(this);
     }
 
     componentDidMount() {
         fetch('/packages/' + this.props.match.params.packId + '/cards/', {credentials: "include"})
             .then(response => response.json())
             .then(data => this.setState({cards: data}));
+    }
+
+    async putCard(currentCard) {
+        const rawResponse = await fetch('/packages/' + this.props.match.params.packId + '/cards/' + currentCard.id, {
+            method: 'PUT',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            credentials: "include",
+            body: JSON.stringify(currentCard)
+        });
+
+        alert(JSON.stringify(rawResponse.body));
     }
 
     handleNextCard() {
@@ -45,7 +59,7 @@ class CardViewer extends Component {
             if(index === this.state.currentCardIndex) {
                 return card;
             }
-        }).map(card => <CardViewerElement card = {card}
+        }).map(card => <CardViewerElement key={card.id} card = {card}
                                           handleNextCard = {this.handleNextCard}
                                           handlePreviousCard = {this.handlePreviousCard}/>);
 
@@ -54,6 +68,7 @@ class CardViewer extends Component {
             <Container>
                 <div className="d-flex justify-content-center">
                     <div className="col-6 pt-5 ">
+                        <CardRepeatManager card = {this.state.cards[this.state.currentCardIndex]} putCard = {this.putCard}/>
                         {currentCard}
                     </div>
                 </div>
