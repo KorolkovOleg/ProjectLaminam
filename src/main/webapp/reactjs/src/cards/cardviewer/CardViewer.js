@@ -21,7 +21,7 @@ class CardViewer extends Component {
     }
 
     componentDidMount() {
-        fetch('/packages/' + this.props.match.params.packId + '/cards/', {credentials: "include"})
+        fetch('/packages/' + this.props.match.params.packId + '/cards/'  + "?" + new URLSearchParams({isTimelyOnly: "true"}), {credentials: "include"})
             .then(response => response.json())
             .then(data => this.setState({cards: data}));
     }
@@ -38,19 +38,31 @@ class CardViewer extends Component {
         });
 
         alert(JSON.stringify(rawResponse.body));
+
+        let updatedCards = this.state.cards;
+        updatedCards.splice(this.state.currentCardIndex, 1);
+        this.setState({cards: updatedCards});
+
+        if(this.state.currentCardIndex >= this.state.cards.length) {
+            this.setState({currentCardIndex: 0});
+        }
     }
 
     handleNextCard() {
         if(this.state.currentCardIndex < this.state.cards.length - 1) {
             let currentCardIndex = this.state.currentCardIndex;
             this.setState({currentCardIndex: currentCardIndex + 1});
-        }
+        } else (
+            this.setState({currentCardIndex: 0})
+        )
     }
 
     handlePreviousCard() {
         if(this.state.currentCardIndex > 0) {
             let currentCardIndex = this.state.currentCardIndex;
             this.setState({currentCardIndex: currentCardIndex - 1});
+        } else {
+            this.setState( {currentCardIndex: this.state.cards.length - 1})
         }
     }
 
@@ -69,7 +81,13 @@ class CardViewer extends Component {
                 <div className="d-flex justify-content-center">
                     <div className="col-6 pt-5 ">
                         <CardRepeatManager card = {this.state.cards[this.state.currentCardIndex]} putCard = {this.putCard}/>
-                        {currentCard}
+                        {
+                            (this.state.cards.length === 0) ? (
+                                <div>
+                                    <p>No cards to repeat</p>
+                                </div>
+                            ) : (currentCard)
+                        }
                     </div>
                 </div>
             </Container>

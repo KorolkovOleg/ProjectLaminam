@@ -25,7 +25,7 @@ class CardList extends Component {
     }
 
     componentDidMount() {
-        fetch('/packages/' + this.props.match.params.packId + '/cards/', {credentials: "include"})
+        fetch('/packages/' + this.props.match.params.packId + '/cards' + "?" + new URLSearchParams({isTimelyOnly: "false"}), {credentials: "include"})
             .then(response => response.json())
             .then(data => this.setState({cards: data}));
 

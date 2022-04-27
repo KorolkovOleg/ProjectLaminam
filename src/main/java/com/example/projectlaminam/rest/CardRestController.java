@@ -13,6 +13,7 @@ import java.net.URISyntaxException;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 import static org.springframework.http.ResponseEntity.ok;
 
@@ -30,14 +31,24 @@ public class CardRestController {
 
     @GetMapping
     public ResponseEntity<List<Card>> getCards(@PathVariable("packId") Long packId,
-                               @AuthenticationPrincipal UserDetails user) throws RuntimeException {
+                                               @AuthenticationPrincipal UserDetails user,
+                                               @RequestParam("isTimelyOnly") Boolean isTimelyOnly) throws RuntimeException {
 
         Pack pack = packRepository.findById(packId).orElseThrow(RuntimeException::new);
         if(pack.getUsers().stream().noneMatch(u -> u.getUsername().equals(user.getUsername()))) {
             return ResponseEntity.status(403).build();
         }
-        return ResponseEntity.ok(cardRepository.findAllByPack(pack));
+
+        if(isTimelyOnly) {
+            return ResponseEntity.ok(cardRepository.findAllByPack(pack)
+                    .stream()
+                    .filter(c -> c.getNextRepeatDate().before(new Date()))
+                    .collect(Collectors.toList()));
+        } else {
+            return ResponseEntity.ok(cardRepository.findAllByPack(pack));
+        }
     }
+
 
     @PostMapping
     public ResponseEntity<Card> createCard(@RequestBody Card card,
