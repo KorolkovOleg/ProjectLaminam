@@ -1,5 +1,6 @@
 import {Component} from "react";
 import {Button, ButtonGroup, ButtonToolbar} from "reactstrap";
+import NextRepeatDateConverter from "../NextRepeatDateConverter";
 
 class CardRepeatManager extends Component {
 
@@ -18,25 +19,11 @@ class CardRepeatManager extends Component {
     async handleNewNextRepeatDate(event) {
         let currentCard = this.props.card;
         let stringValue = event.target.name === "ownTime" ? this.state.ownTime : event.target.value;
-        let interval = parseInt(stringValue.toString());
-        let timeUnit = stringValue.toString().replace(/\d/gm, "");
-        alert(timeUnit);
-        currentCard.nextRepeatDate = this.getNewNextRepeatDate(interval, timeUnit);
+        currentCard.nextRepeatDate = NextRepeatDateConverter.getNextRepeatDateOfString(stringValue);
         alert(JSON.stringify(currentCard));
         this.props.putCard(currentCard);
     }
 
-
-
-    getNewNextRepeatDate(interval, timeUnit) {
-        let date = new Date();
-        if(timeUnit === "d") {
-            date.setDate(date.getDate() + interval);
-        } else {
-            date.setHours(date.getHours() + interval);
-        }
-        return date;
-    }
 
     handleChange(event) {
         const target = event.target;

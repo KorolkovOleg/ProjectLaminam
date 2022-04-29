@@ -1,18 +1,26 @@
 import React, {Component} from "react";
 import {withRouter} from "react-router-dom";
 import {Button} from "reactstrap";
+import NextRepeatDateConverter from "./NextRepeatDateConverter";
 
 class CardEdit extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            item: this.props.card
+            item: {
+                id: this.props.card.id,
+                label: this.props.card.label,
+                frontSide: this.props.card.frontSide,
+                backSide: this.props.card.backSide,
+                nextRepeatDate: NextRepeatDateConverter.getStringOfNextRepeatDate(this.props.card.nextRepeatDate)
+            }
         }
-
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
+
+
 
     handleChange(event) {
         const target = event.target;
@@ -25,10 +33,15 @@ class CardEdit extends Component {
 
     handleSubmit(event) {
         event.preventDefault();
-        this.props.putCard(this.state.item);
+        this.props.putCard({id: this.state.item.id,
+        label: this.state.item.label,
+        frontSide: this.state.item.frontSide,
+        backSide: this.state.item.backSide,
+        nextRepeatDate: NextRepeatDateConverter.getNextRepeatDateOfString(this.state.item.nextRepeatDate)});
     }
 
     render() {
+
         return (
             <form onSubmit={this.handleSubmit}>
                 <div className="card p-1">
@@ -41,6 +54,9 @@ class CardEdit extends Component {
                         </div>
                         <div className="col">
                             <input className="p-2 border bg-light container-fluid" name="backSide" id="backSide" onChange={this.handleChange} value={this.state.item.backSide}/>
+                        </div>
+                        <div className="col">
+                            <input className="p-2 border bg-light container-fluid" name="nextRepeatDate" id="nextRepeatDate" onChange={this.handleChange} value={this.state.item.nextRepeatDate}/>
                         </div>
                     </div>
                     <div className="row gx-1">

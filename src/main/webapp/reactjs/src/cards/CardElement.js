@@ -1,5 +1,6 @@
 import React, {Component} from "react";
 import {Button, ButtonGroup} from "reactstrap";
+import NextRepeatDateConverter from "./NextRepeatDateConverter";
 
 class CardElement extends Component {
 
@@ -19,6 +20,9 @@ class CardElement extends Component {
     }
 
     render() {
+
+        let repeatThough = NextRepeatDateConverter.getStringOfNextRepeatDate(this.props.card.nextRepeatDate);
+
         return(
             <div className="card p-1">
                 <div className="row gx-1">
@@ -30,6 +34,9 @@ class CardElement extends Component {
                     </div>
                     <div className="col">
                         <div className="p-3 border bg-light">{this.props.card.backSide}</div>
+                    </div>
+                    <div className="col">
+                        <div className="p-3 border bg-light">{repeatThough}</div>
                     </div>
                 </div>
                 <ButtonGroup>
