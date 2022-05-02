@@ -15,16 +15,18 @@ class NextRepeatDateConverter extends Component{
     }
 
     static getNextRepeatDateOfString(string) {
-        let interval = parseInt(string.toString());
-        let timeUnit = string.toString().replace(/\d/gm, "");
-        alert(string);
         let date = new Date();
-        if(timeUnit === "d") {
-            date.setDate(date.getDate() + interval);
-        } else {
-            date.setHours(date.getHours() + interval);
+        if(string.match(/^\d{1,3}[dh]/)) {
+            let interval = parseInt(string.toString());
+            let timeUnit = string.toString().replace(/\d/gm, "");
+            alert(string);
+            if (timeUnit === "d") {
+                date.setDate(date.getDate() + interval);
+            } else {
+                date.setHours(date.getHours() + interval);
+            }
+            alert(date);
         }
-        alert(date);
         return date;
     }
 
