@@ -1,6 +1,7 @@
 import {Component} from "react";
 import {Button, ButtonGroup, ButtonToolbar} from "reactstrap";
 import NextRepeatDateConverter from "../NextRepeatDateConverter";
+import NextRepeatDateInput from "./NextRepeatDateInput";
 
 class CardRepeatManager extends Component {
 
@@ -25,6 +26,7 @@ class CardRepeatManager extends Component {
     }
 
 
+
     handleChange(event) {
         const target = event.target;
         const value = target.value;
@@ -46,10 +48,11 @@ class CardRepeatManager extends Component {
                     <Button onClick={this.handleNewNextRepeatDate} value = {"30d"}>30d</Button>
                     <Button onClick={this.handleNewNextRepeatDate} value = {"60d"}>60d</Button>
                     <Button onClick={this.handleNewNextRepeatDate} value = {"90d"}>90d</Button>
-                    <div className="row">
-                        <input onChange={this.handleChange} value={this.state.ownTime}/>
-                        <Button onClick={this.handleNewNextRepeatDate}  name="ownTime">Own time</Button>
-                    </div>
+                    {/*<div className="row">*/}
+                    {/*    <input onChange={this.handleChange} value={this.state.ownTime}/>*/}
+                    {/*    <Button onClick={this.handleNewNextRepeatDate}  name="ownTime">Own time</Button>*/}
+                    {/*</div>*/}
+                    <NextRepeatDateInput handleNewNextRepeatDate = {this.handleNewNextRepeatDate}/>
                 </ButtonGroup>
             </div>
         )
